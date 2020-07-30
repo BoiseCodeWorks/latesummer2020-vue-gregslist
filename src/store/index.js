@@ -61,6 +61,14 @@ export default new Vuex.Store({
       } catch (error) {
         console.error(error);
       }
+    },
+    async updateCar({ commit }, updatedCar) {
+      try {
+        let res = await _api.put("cars/" + updatedCar.id, updatedCar.data)
+        commit("setActiveCar", res.data)
+      } catch (error) {
+        console.error(error);
+      }
     }
   },
   modules: {

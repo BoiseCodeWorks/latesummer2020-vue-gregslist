@@ -124,7 +124,15 @@
       </div>
     </div>
     <!-- Modal End -->
+    <button
+      class="btn-secondary btn btn-block mb-2"
+      @click="highToLow = !highToLow"
+    >Price: High To Low</button>
     <car v-for="car in cars" :carData="car" :key="car.id" />
+    <car
+      :carData="{make: 'Whatevs', model: 'neat', price: 200, year: 2020, description: 'fake car', imgUrl: '//placehold.it/200x200'}"
+      :sold="true"
+    ></car>
   </div>
 </template>
 
@@ -136,6 +144,8 @@ export default {
   data() {
     return {
       newCar: {},
+      highToLow: false,
+      lowToHigh: false,
     };
   },
   mounted() {
@@ -143,7 +153,11 @@ export default {
   },
   computed: {
     cars() {
-      return this.$store.state.cars;
+      let cars = [...this.$store.state.cars];
+      if (this.highToLow) {
+        return cars.sort((a, b) => b.price - a.price);
+      }
+      return cars;
     },
   },
   methods: {
