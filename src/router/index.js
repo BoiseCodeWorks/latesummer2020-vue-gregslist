@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../pages/Home.vue'
+import { nextTick } from 'q';
 
 Vue.use(VueRouter)
 
@@ -26,7 +27,11 @@ const routes = [
   {
     path: '/cars/:id',
     name: 'Car',
-    component: () => import(/* webpackChunkName: "cardeetz" */ '../pages/CarDeetz.vue')
+    component: () => import(/* webpackChunkName: "cardeetz" */ '../pages/CarDeetz.vue'),
+    // for an individual route
+    // beforeEnter: (to, from, next) => {
+    //   // ...
+    // }
   },
   {
     path: '*',
@@ -39,3 +44,21 @@ const router = new VueRouter({
 })
 
 export default router
+
+// for all routes
+router.beforeEach((to, from, next) => {
+  // if (to.name != "Home" && !isAuthenticated) {
+  //   next({ name: "Home" })
+  // }
+
+  if (from.name == "Cars") {
+    const answer = window.confirm("Are you sure you want to leave cars? You will lose your unsaved information.")
+    if (answer) {
+      next()
+    } else {
+      next(false)
+    }
+  } else {
+    next()
+  }
+})
